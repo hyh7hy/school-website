@@ -3,155 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Posts</title>
+    <title>Post Page</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #eaeaea;
-            color: #333;
+        /* General Styling */
+        body { 
+            font-family: Arial, sans-serif; 
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
         }
-        header {
-            background: #ff4d4d; /* Red header */
-            color: white;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        .container { 
+            max-width: 600px; 
+            width: 100%; 
+            margin: 20px; 
+            padding: 20px; 
+            background-color: #ffffff; 
+            border-radius: 15px; 
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); 
         }
-        main {
-            padding: 20px;
-            max-width: 800px;
-            margin: 20px auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+        /* Form Styling */
+        .create-post { 
+            background-color: #ffffff; 
+            border-radius: 15px; 
+            padding: 20px; 
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); 
         }
-        .post {
-            border-radius: 10px;
-            background-color: #f9f9f9;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        .create-post h2 { 
+            font-size: 20px; 
+            color: #555; 
+            margin-bottom: 15px; 
         }
-        .post h2 {
-            margin: 0 0 10px 0;
-            font-size: 20px;
-            color: #333;
+        .form-group { 
+            margin-bottom: 15px; 
         }
-        .post p {
-            margin: 0;
-            font-size: 16px;
+        .form-group label { 
+            font-size: 14px; 
+            color: #333; 
+            display: block; 
+            margin-bottom: 5px; 
         }
-        img {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-top: 10px;
-            display: block;
+        .form-group input, .form-group textarea { 
+            width: 100%; 
+            padding: 12px; 
+            font-size: 14px; 
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
+            outline: none; 
+            box-sizing: border-box; 
+            transition: 0.3s; 
         }
-        button {
-            background-color: #ff4d4d; /* Red button */
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
+        .form-group input:focus, .form-group textarea:focus { 
+            border-color: #ff6b6b; 
+            box-shadow: 0px 4px 8px rgba(255, 107, 107, 0.3); 
         }
-        button:hover {
-            background-color: #e60000; /* Darker red on hover */
+        .form-group input[type="file"] { padding: 5px; }
+        button { 
+            display: inline-block; 
+            padding: 10px 20px; 
+            font-size: 14px; 
+            color: #ffffff; 
+            background: linear-gradient(135deg, #ff6b6b, #f06595); 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            transition: background 0.3s; 
         }
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
+        button:hover { 
+            background: linear-gradient(135deg, #f06595, #ff6b6b); 
         }
-        .new-post {
-            margin-bottom: 20px;
-            padding: 20px;
-            background-color: #f4f4f4;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+        /* Refresh Button Styling */
+        .refresh-btn { 
+            background: linear-gradient(135deg, #56ccf2, #2f80ed); 
+            margin-top: 10px; 
         }
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
+        .refresh-btn:hover { 
+            background: linear-gradient(135deg, #2f80ed, #56ccf2); 
         }
-        .refresh-button {
-            display: inline-block;
-            margin-top: 15px;
-            font-size: 16px;
+
+        /* Post Styling */
+        .post-list { 
+            margin-top: 20px; 
         }
+        .post-item { 
+            background-color: #ffffff; 
+            border-radius: 15px; 
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1); 
+            padding: 20px; 
+            margin-bottom: 20px; 
+        }
+        .post-item p { 
+            font-size: 15px; 
+            color: #333; 
+            margin: 0 0 10px; 
+        }
+        .post-item img { 
+            max-width: 100%; 
+            border-radius: 10px; 
+            margin-top: 10px; 
+        }
+
     </style>
 </head>
 <body>
-    <header>
-        <h1>Posts</h1>
-    </header>
-    <main>
-        <div class="new-post">
-            <h2>Add a New Post</h2>
-            <input type="text" id="post-title" placeholder="Title" required>
-            <textarea id="post-content" rows="4" placeholder="Write your post here..." required></textarea>
-            <input type="file" id="post-media" accept="image/*">
-            <button onclick="addPost()">Post</button>
-        </div>
 
-        <h2>All Posts</h2>
-        <div id="posts-container">
-            <!-- Posts will be dynamically added here -->
-        </div>
+<div class="container">
+    <!-- Create Post Section -->
+    <div class="create-post">
+        <h2>Create a New Post</h2>
+        <form id="postForm">
+            <div class="form-group">
+                <label for="postText">What's on your mind?</label>
+                <textarea id="postText" rows="3" placeholder="Write something..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="postImage">Upload Image</label>
+                <input type="file" id="postImage" accept="image/*">
+            </div>
+            <button type="button" onclick="submitPost()">Post</button>
+        </form>
+        <button class="refresh-btn" onclick="refreshPosts()">Refresh</button>
+    </div>
+   <!-- Post List Section -->
+   <div class="post-list" id="postList">
+    <!-- Posts will appear here -->
+</div>
+</div>
 
-        <button class="refresh-button" onclick="refreshPosts()">Refresh Posts</button>
-    </main>
-    <footer>
-        <p>&copy; 2024 Your School Name</p>
-    </footer>
+<script>
+const posts = [];
 
-    <script>
-        const postsContainer = document.getElementById('posts-container');
-        let posts = JSON.parse(localStorage.getItem('posts')) || []; // Retrieve posts from local storage
+function submitPost() {
+    const postText = document.getElementById('postText').value;
+    const postImage = document.getElementById('postImage').files[0];
+    
+    const post = {
+        text: postText,
+        image: postImage ? URL.createObjectURL(postImage) : null
+    };
+    
+    posts.push(post);
+    displayPosts();
+}
 
-        // Display posts on page load
-        displayPosts();
+function refreshPosts() {
+    displayPosts();
+}
 
-        function addPost() {
-            const title = document.getElementById('post-title').value;
-            const content = document.getElementById('post-content').value;
-            const media = document.getElementById('post-media').files[0];
-
-            if (title && content) {const post = { title, content, media };
-                posts.push(post);
-                localStorage.setItem('posts', JSON.stringify(posts)); // Save posts to local storage
-                displayPosts();
-                document.getElementById('post-title').value = '';
-                document.getElementById('post-content').value = '';
-                document.getElementById('post-media').value = '';
-            } else {
-                alert('Please fill in both the title and content.');
-            }
+function displayPosts() {
+    const postList = document.getElementById('postList');
+    postList.innerHTML = '';
+    
+    posts.forEach(post => {
+        const postItem = document.createElement('div');
+        postItem.classList.add('post-item');
+        
+        const postText = document.createElement('p');
+        postText.textContent = post.text;
+        postItem.appendChild(postText);
+        
+        if (post.image) {
+            const postImage = document.createElement('img');
+            postImage.src = post.image;
+            postItem.appendChild(postImage);
         }
+        
+        postList.appendChild(postItem);
+    });
+}
+</script>
 
-        function displayPosts() {
-            postsContainer.innerHTML = ''; // Clear the container before displaying posts
-            posts.forEach((post) => {
-                const postDiv = document.createElement('div');
-                postDiv.className = 'post';
-                postDiv.innerHTML = '<h2>${post.title}</h2><p>${post.content}</p>';
-                                     {post.media ? <img src="${URL.createObjectURL(post.media)}" alt="Post Media" /> : ''};
-                postsContainer.appendChild(postDiv);
-            });
-        }
-
-        function refreshPosts() {
-            displayPosts(); // Refresh posts by displaying them again
-        }
-    </script>
 </body>
-</html>
+</html> 
