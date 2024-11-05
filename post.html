@@ -135,166 +135,168 @@
     <div class="post-list" id="postList"></div>
 </div>
 <script>
-    // Load existing posts from localStorage
-    const posts = JSON.parse(localStorage.getItem('posts')) || [];
-    function submitPost() {
-        const postText = document.getElementById('postText').value.trim();
-        const postFile = document.getElementById('postFile').files[0]; // Get the uploaded file
-        
-        // Check if post text is empty and no file is uploaded
-        if (!postText && !postFile) {
-            alert('Please enter text or upload an image/video.');
-            return;
-        }
+   // Load existing posts from localStorage
+const posts = JSON.parse(localStorage.getItem('posts')) || [];
 
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new post object
-            const post = {
-                text: postText,
-                file: event.target.result, // Store the base64 string of the file
-                isVideo: postFile && postFile.type.startsWith('video/'),
-                timestamp: new Date().toLocaleString(),
-                likes: 0,
-                liked: false,
-                comments: []
-            };
+function submitPost() {
+    const postText = document.getElementById('postText').value.trim();
+    const postFile = document.getElementById('postFile').files[0]; // Get the uploaded file
 
-            // Add the post to the array and save it
-            posts.unshift(post); // Add the new post to the beginning of the array
-            localStorage.setItem('posts', JSON.stringify(posts));
+    // Check if post text is empty and no file is uploaded
+    if (!postText && !postFile) {
+        alert('Please enter text or upload an image/video.');
+        return;
+    }
 
-            // Clear input fields
-            document.getElementById('postText').value = '';
-            document.getElementById('postFile').value = '';
-
-            // Refresh the displayed posts
-            displayPosts();
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        // Create a new post object
+        const post = {
+            text: postText,
+            file: event.target.result, // Store the base64 string of the file
+            isVideo: postFile && postFile.type.startsWith('video/'),
+            timestamp: new Date().toLocaleString(),
+            likes: 0,
+            liked: false,
+            comments: []
         };
 
-        if (postFile) {
-            reader.readAsDataURL(postFile); // Convert the file to base64
-        } else {
-            // Create a new post without a file
-            const post = {
-                text: postText,
-                file: null,
-                isVideo: false,
-                timestamp: new Date().toLocaleString(),
-                likes: 0,
-                liked: false,
-                comments: []
-            };
+        // Add the post to the array and save it
+        posts.unshift(post); // Add the new post to the beginning of the array
+        localStorage.setItem('posts', JSON.stringify(posts));
 
-            // Add the post to the array and save it
-            posts.unshift(post); // Add the new post to the beginning of the array
-            localStorage.setItem('posts', JSON.stringify(posts));
+        // Clear input fields
+        document.getElementById('postText').value = '';
+        document.getElementById('postFile').value = '';
 
-            // Clear input fields
-            document.getElementById('postText').value = '';
-            document.getElementById('postFile').value = '';
+        // Refresh the displayed posts
+        displayPosts();
+    };
 
-            // Refresh the displayed posts
-            displayPosts();
-        }
+    if (postFile) {
+        reader.readAsDataURL(postFile); // Convert the file to base64
+    } else {
+        // Create a new post without a file
+        const post = {
+            text: postText,
+            file: null,
+            isVideo: false,
+            timestamp: new Date().toLocaleString(),
+            likes: 0,
+            liked: false,
+            comments: []
+        };
+
+        // Add the post to the array and save it
+        posts.unshift(post); // Add the new post to the beginning of the array
+        localStorage.setItem('posts', JSON.stringify(posts));
+
+        // Clear input fields
+        document.getElementById('postText').value = '';
+        document.getElementById('postFile').value = '';
+
+        // Refresh the displayed posts
+        displayPosts();
     }
+}
 
-    // Function to display posts
-    function displayPosts() {
-        const postList = document.getElementById('postList');
-        postList.innerHTML = ''; // Clear existing posts
+// Function to display posts
+function displayPosts() {
+    const postList = document.getElementById('postList');
+    postList.innerHTML = ''; // Clear existing posts
 
-        posts.forEach((post, index) => {
-            const postItem = document.createElement('div');
-            postItem.classList.add('post-item');
+    posts.forEach((post, index) => {
+        const postItem = document.createElement('div');
+        postItem.classList.add('post-item');
 
-            const postText = document.createElement('p');
-            postText.textContent = post.text;
-            postItem.appendChild(postText);
+        const postText = document.createElement('p');
+        postText.textContent = post.text;
+        postItem.appendChild(postText);
 
-            if (post.file) {
-                if (post.isVideo) {
-                    const postVideo = document.createElement('video');
-                    postVideo.src = post.file;
-                    postVideo.controls = true; // Add video controls
-                    postItem.appendChild(postVideo);
-                } else {
-                    const postImage = document.createElement('img');
-                    postImage.src = post.file;
-                    postItem.appendChild(postImage);
-                }
+        if (post.file) {
+            if (post.isVideo) {
+                const postVideo = document.createElement('video');
+                postVideo.src = post.file;
+                postVideo.controls = true; // Add video controls
+                postItem.appendChild(postVideo);
+            } else {
+                const postImage = document.createElement('img');
+                postImage.src = post.file;
+                postItem.appendChild(postImage);
             }
+        }
 
-            const postTimestamp = document.createElement('div');
-            postTimestamp.classList.add('post-timestamp');
-            postTimestamp.textContent = post.timestamp; // Display timestamp
-            postItem.appendChild(postTimestamp);
+        const postTimestamp = document.createElement('div');
+        postTimestamp.classList.add('post-timestamp');
+        postTimestamp.textContent = post.timestamp; // Display timestamp
+        postItem.appendChild(postTimestamp);
 
-            // Like Button
-            const likeButton = document.createElement('button');
-            likeButton.innerHTML =  `❤️ (${post.likes})`; // Use heart icon for likes
-            likeButton.className = 'like-button' + (post.liked ? ' liked' : '');
-            likeButton.onclick = () => {
-                post.liked = !post.liked;
-                post.likes += post.liked ? 1 : -1; // Increment or decrement likes
+        // Like Button
+        const likeButton = document.createElement('button');
+        likeButton.innerHTML = `❤️ (${post.likes}) `; // Use heart icon for likes
+        likeButton.className = 'like-button' + (post.liked ? ' liked' : '');
+        likeButton.onclick = () => {
+            post.liked = !post.liked;
+            post.likes += post.liked ? 1 : -1; // Increment or decrement likes
+            localStorage.setItem('posts', JSON.stringify(posts)); // Update local storage
+            displayPosts(); // Refresh posts
+        };
+        postItem.appendChild(likeButton); // Toggle Comments Section
+        const toggleComments = document.createElement('div');
+        toggleComments.className = 'toggle-comments';
+        toggleComments.textContent = '💬'; // Use comment icon
+        toggleComments.onclick = () => {
+            const commentSection = postItem.querySelector('.comment-section');
+            const isVisible = commentSection.style.display === 'block';
+            commentSection.style.display = isVisible ? 'none' : 'block'; // Toggle visibility
+            toggleComments.textContent = isVisible ? '💬' : '🔒'; // Change icon based on visibility
+        };
+        postItem.appendChild(toggleComments);
+
+        // Comment Section
+        const commentSection = document.createElement('div');
+        commentSection.classList.add('comment-section');
+        commentSection.style.display = 'none'; // Initially hidden
+
+        // Display existing comments
+        post.comments.forEach(comment => {
+            const commentDiv = document.createElement('div');
+            commentDiv.classList.add('comment');
+            commentDiv.textContent = comment;
+            commentSection.appendChild(commentDiv);
+        });
+
+        // Comment Input
+        const commentInput = document.createElement('input');
+        commentInput.type = 'text';
+        commentInput.placeholder = 'Add a comment...';
+        commentInput.className = 'comment-input';
+        commentInput.style.width = '80%';
+        commentInput.style.marginRight = '10px';
+
+        const commentButton = document.createElement('button');
+        commentButton.innerText = 'Comment';
+        commentButton.className = 'comment-button';
+        commentButton.onclick = () => {
+            const commentText = commentInput.value.trim();
+            if (commentText) {
+                post.comments.push(commentText); // Add comment to the post
                 localStorage.setItem('posts', JSON.stringify(posts)); // Update local storage
                 displayPosts(); // Refresh posts
-            };
-            postItem.appendChild(likeButton);
-            // Toggle Comments Section
-            const toggleComments = document.createElement('div');
-            toggleComments.className = 'toggle-comments';
-            toggleComments.textContent = '💬'; // Use comment icon
-            toggleComments.onclick = () => {
-                const commentSection = postItem.querySelector('.comment-section');
-                const isVisible = commentSection.style.display === 'block';
-                commentSection.style.display = isVisible ? 'none' : 'block'; // Toggle visibility
-                toggleComments.textContent = isVisible ? '💬' : '🔒'; // Change icon based on visibility
-            };
-            postItem.appendChild(toggleComments);
+                commentInput.value = ''; // Clear input
+            }
+        };
 
-            // Comment Section
-            const commentSection = document.createElement('div');
-            commentSection.classList.add('comment-section');
-            commentSection.style.display = 'none'; // Initially hidden
+        commentSection.appendChild(commentInput);
+        commentSection.appendChild(commentButton);
+        postItem.appendChild(commentSection);
 
-            // Display existing comments
-            post.comments.forEach(comment => {
-                const commentDiv = document.createElement('div');
-                commentDiv.classList.add('comment');
-                commentDiv.textContent = comment;
-                commentSection.appendChild(commentDiv);
-            });// Comment Input
-            const commentInput = document.createElement('input');
-            commentInput.type = 'text';
-            commentInput.placeholder = 'Add a comment...';
-            commentInput.className = 'comment-input';
-            commentInput.style.width = '80%';
-            commentInput.style.marginRight = '10px';
+        postList.appendChild(postItem);
+    });
+}
 
-            const commentButton = document.createElement('button');
-            commentButton.innerText = 'Comment';
-            commentButton.className = 'comment-button';
-            commentButton.onclick = () => {
-                const commentText = commentInput.value.trim();
-                if (commentText) {
-                    post.comments.push(commentText); // Add comment to the post
-                    localStorage.setItem('posts', JSON.stringify(posts)); // Update local storage
-                    displayPosts(); // Refresh posts
-                    commentInput.value = ''; // Clear input
-                }
-            };
-
-            commentSection.appendChild(commentInput);
-            commentSection.appendChild(commentButton);
-            postItem.appendChild(commentSection);
-
-            postList.appendChild(postItem);
-        });
-    }
-
-    // Initial display of posts
-    displayPosts();
+// Initial display of posts
+displayPosts();
 </script>
 </body>
 </html>
